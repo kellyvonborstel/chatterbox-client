@@ -13,7 +13,7 @@ $(function() {
 
       app.$main = $('#main');
       app.$message = $('#message');
-      app.$chat = $('#chat');
+      app.$chats = $('#chats');
       app.$roomSelect = $('#roomSelect');
       app.$send = $('#send');
 
@@ -58,15 +58,30 @@ $(function() {
     },
 
     populateMessages: function(results) {
-      
+      app.clearMessages();
+      if (Array.isArray(results)) {
+        results.forEach(app.addMessage);
+      }
     },
 
     clearMessages: function() {
-
+      app.$chats.empty();
     },
 
-    addMessage: function() {
-
+    addMessage: function(data) {
+      if (!data.roomname) {
+        data.roomname = 'lobby';
+        if (data.roomname === app.room) {
+          var $chat = $('<div class="chat" />')
+            .attr('data-username', data.username)
+            .attr('data-roomname', data.roomname)
+            .appendTo($chat);
+          var $message = $('<br><span />');
+          $message.text('data.text')
+            .appendTo($chat);
+          app.$chats.append($chat);
+        }
+      }
     },
 
     addRoom: function(roomname) {
