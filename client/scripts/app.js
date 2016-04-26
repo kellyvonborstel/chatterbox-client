@@ -7,6 +7,7 @@ $(function() {
     server: 'https//api.parse.com/1/classes/chatterbox/',
     username: 'anonymous',
     room: 'lobby',
+    friends: {},
 
     init: function() {
       app.username = window.location.search.substr(10);
@@ -19,6 +20,7 @@ $(function() {
 
       app.$roomSelect.on('change', app.saveRoom);
       app.$send.on('submit', app.handleSubmit);
+      app.$main.on('click', '.username', app.addFriend);
 
       app.stopSpinner();
       app.fetch();
@@ -28,6 +30,7 @@ $(function() {
 
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
+
       if (selectedIndex === 0) {
         var roomname = prompt('Enter a room name');
         if (roomname) {
@@ -44,6 +47,7 @@ $(function() {
 
     send: function(data) {
       app.startSpinner();
+
       $.ajax({
         url: app.server,
         type: 'POST',
@@ -63,6 +67,7 @@ $(function() {
 
     fetch: function() {
       app.startSpinner();
+
       $.ajax({
         url: app.server,
         type: 'GET',
@@ -93,6 +98,7 @@ $(function() {
 
     populateRooms: function(results) {
       app.$roomSelect.html('<option value="__newRoom">New Room...</option><option value="lobby" selected>Lobby</option>');
+
       if (results) {
         var processsedRooms = {};
         if (app.room !== 'lobby') {
@@ -107,11 +113,13 @@ $(function() {
           }
         });
       }
+
       app.$roomSelect.val(app.room);
     },
 
     populateMessages: function(results) {
       app.clearMessages();
+
       if (Array.isArray(results)) {
         results.forEach(app.addMessage);
       }
@@ -124,14 +132,20 @@ $(function() {
     addMessage: function(data) {
       if (!data.roomname) {
         data.roomname = 'lobby';
+
         if (data.roomname === app.room) {
           var $chat = $('<div class="chat" />')
             .attr('data-username', data.username)
             .attr('data-roomname', data.roomname)
             .appendTo($chat);
+
+          if (app.friends[data.username] === true) {
+            $username.addClass('.friend');
+          }
+
           var $message = $('<br><span />');
-          $message.text('data.text')
-            .appendTo($chat);
+
+          $message.text('data.text').appendTo($chat);
           app.$chats.append($chat);
         }
       }
@@ -139,15 +153,25 @@ $(function() {
 
     addRoom: function(roomname) {
       var $option = $('<option />').val(roomname).text(roomname);
+
       app.$roomSelect.append($option);
     },
 
-    addFriend: function() {
+    addFriend: function(event) {
+      var username = $(event.currentTarget).attr('data-username');
 
+      if (username !== undefined) {
+        console.log('chatbox: adding %s as a friend', username);
+        app.friends[username] = true;
+
+        var selector = '[data-username="' + username.replace(/"/g, '\\\"') + '"]';
+        $(selector).addClass('friend');
+      }
     },
 
     handleSubmit: function(event) {
       event.preventDefault();
+
       var message = {
         username: app.username,
         roomname: app.room || 'lobby',
