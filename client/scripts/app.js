@@ -4,7 +4,7 @@ $(function() {
   app = {
     server: 'https://api.parse.com/1/classes/chatterbox/',
     username: 'anonymous',
-    roomname: 'Lobby',
+    roomname: 'lobby',
     lastMessageId: 0,
     friends: {},
 
@@ -38,7 +38,6 @@ $(function() {
       // clear messages input
       app.$message.val('');
 
-      // POST message to server
       $.ajax({
         url: app.server,
         type: 'POST',
@@ -119,7 +118,7 @@ $(function() {
     },
 
     populateRooms: function(results) {
-      app.$roomSelect.html('<option value="__newRoom">New room...</option><option value="" selected>Lobby</option>');
+      app.$roomSelect.html('<option value="__newRoom">New room...</option><option value="" selected>lobby</option>');
 
       if (results) {
         var rooms = {};
@@ -148,7 +147,7 @@ $(function() {
 
     addMessage: function(data) {
       if (!data.roomname)
-        data.roomname = 'Lobby';
+        data.roomname = 'lobby';
 
       // only add messages that are in current room
       if (data.roomname === app.roomname) {
@@ -173,6 +172,7 @@ $(function() {
         app.$chats.append($chat);
       }
     },
+
     addFriend: function(event) {
       var username = $(event.currentTarget).attr('data-username');
 
@@ -188,8 +188,8 @@ $(function() {
         var $usernames = $(selector).addClass('friend');
       }
     },
-    saveRoom: function() {
 
+    saveRoom: function() {
       var selectIndex = app.$roomSelect.prop('selectedIndex');
       // new room is always the first option
       if (selectIndex === 0) {
@@ -197,22 +197,17 @@ $(function() {
         if (roomname) {
           // set as current room
           app.roomname = roomname;
-
           // add room to menu
           app.addRoom(roomname);
-
           // select menu option
           app.$roomSelect.val(roomname);
-
           // fetch messages again
           app.fetch();
         }
       } else {
         app.startSpinner();
-
         // store as undefined for empty names
         app.roomname = app.$roomSelect.val();
-
         // fetch messages again
         app.fetch();
       }
@@ -222,7 +217,7 @@ $(function() {
       var message = {
         username: app.username,
         text: app.$message.val(),
-        roomname: app.roomname || 'Lobby'
+        roomname: app.roomname || 'lobby'
       };
 
       app.send(message);
