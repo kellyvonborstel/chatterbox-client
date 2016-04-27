@@ -2,36 +2,44 @@
 var app;
 
 $(function() {
-  app = {
 
+  app = {
     server: 'https//api.parse.com/1/classes/chatterbox/',
     username: 'anonymous',
-    room: 'lobby',
+    roomname: 'lobby',
     lastMessageId: 0,
     friends: {},
 
     init: function() {
+      // get username
       app.username = window.location.search.substr(10);
 
+      // cache jQuery selectors
       app.$main = $('#main');
       app.$message = $('#message');
       app.$chats = $('#chats');
       app.$roomSelect = $('#roomSelect');
       app.$send = $('#send');
 
+      // add listeners
       app.$roomSelect.on('change', app.saveRoom);
       app.$send.on('submit', app.handleSubmit);
       app.$main.on('click', '.username', app.addFriend);
 
+      // fetch previous messages
       app.stopSpinner();
       app.fetch(false);
 
+      // poll for new messages
       setInterval(app.fetch, 3000);
     },
 
     send: function(data) {
       app.startSpinner();
+      // clear message input
+      app.$message.empty();
 
+      // POST message to server
       $.ajax({
         url: app.server,
         type: 'POST',
@@ -39,10 +47,53 @@ $(function() {
         contentType: 'application.json',
         success: function(data) {
           console.log('chatterbox: message sent');
+          // update messages
           app.fetch();
         },
         error: function(data) {
           console.error('chatterbox: failed to send message');
+        }
+      });
+    },
+
+    fetch: function(animate) {
+      app.startSpinner();
+
+      $.ajax({
+        url: app.server,
+        type: 'GET',
+        contentType: 'application/json',
+        data: {
+          order: '-createdAt'
+        },
+        success: function(data) {
+          console.log('chatterbox: messages fetched');
+
+          // return if we have no results
+          if (!data.results || !data.results.length) {
+            return;
+          }
+
+          // get the last message
+          var mostRecentMessage = data.results[data.results.length - 1];
+          var displayedRoom = $('.chat span').first().data('roomname');
+          app.stopSpinner();
+
+          // only update DOM if we have new message
+          if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
+
+            // update UI with fetched rooms
+            app.populateRooms(data.results);
+
+            // update UI with fetched messages
+            app.populateMessages(data.results, animate);
+            
+            // store the ID of most recent message
+            app.lastMessageId = mostRecentMessage.objectId;
+          }
+        },
+        error: function(data) {
+          console.error('chatterbox: failed to fetch messages');
         }
       });
     },
@@ -62,29 +113,6 @@ $(function() {
         app.room = app.$roomSelect.val();
         app.fetch();
       }
-    },
-
-    fetch: function() {
-      app.startSpinner();
-
-      $.ajax({
-        url: app.server,
-        type: 'GET',
-        contentType: 'application/json',
-        data: {
-          order: '-createdAt'
-        },
-        complete: function() {
-          app.stopSpinner();
-        },
-        success: function(data) {
-          app.populateRooms(data.results);
-          app.populateMessages(data.results);
-        },
-        error: function(reason) {
-          console.error('failed to fetch data: ', reason);
-        }
-      });
     },
 
     startSpinner: function() {
