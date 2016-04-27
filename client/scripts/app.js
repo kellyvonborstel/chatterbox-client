@@ -143,6 +143,44 @@ $(function() {
       app.$roomSelect.val(app.room);
     },
 
+    addRoom: function(roomname) {
+      // prevent XSS by escaping with DOM methods
+      var $option = $('<option/>').val(roomname).text(roomname);
+
+      // add to select
+      app.$roomSelect.append($option);
+    },
+
+    addMessage: function(data) {
+      if (!data.roomname) {
+        data.roomname = 'lobby';
+
+        // only add message that are from current room
+        if (data.roomname === app.roomname) {
+          // create div to hold chats
+          var $chat = $('<div class="chat"/>');
+
+          // add the message data using DOM methods to prevent XSS
+          // store username in element's data
+          var $username = $('<span class="username"/>');
+          $username.text(data.username+': ')
+            .attr('data-username', data.username)
+            .attr('data-roomname',data.roomname)
+            .appendTo($chat);
+
+          // add the friend class
+          if (app.friends[data.username] === true) {
+            $username.addClass('.friend');
+          }
+
+          // add message to UI
+          var $message = $('<br><span/>');
+          $message.text('data.text').appendTo($chat);
+          app.$chats.append($chat);
+        }
+      }
+    },
+
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
 
@@ -166,34 +204,6 @@ $(function() {
 
     stopSpinner: function() {
       $('.spinner img').hide();
-    },
-
-    addMessage: function(data) {
-      if (!data.roomname) {
-        data.roomname = 'lobby';
-
-        if (data.roomname === app.room) {
-          var $chat = $('<div class="chat" />')
-            .attr('data-username', data.username)
-            .attr('data-roomname', data.roomname)
-            .appendTo($chat);
-
-          if (app.friends[data.username] === true) {
-            $username.addClass('.friend');
-          }
-
-          var $message = $('<br><span />');
-
-          $message.text('data.text').appendTo($chat);
-          app.$chats.append($chat);
-        }
-      }
-    },
-
-    addRoom: function(roomname) {
-      var $option = $('<option />').val(roomname).text(roomname);
-
-      app.$roomSelect.append($option);
     },
 
     addFriend: function(event) {
