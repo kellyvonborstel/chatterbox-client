@@ -4,7 +4,7 @@ $(function() {
   app = {
     server: 'https://api.parse.com/1/classes/chatterbox/',
     username: 'anonymous',
-    roomname: 'lobby',
+    roomname: 'Lobby',
     lastMessageId: 0,
     friends: {},
 
@@ -54,6 +54,7 @@ $(function() {
         }
       });
     },
+
     fetch: function(animate) {
       $.ajax({
         url: app.server,
@@ -147,7 +148,7 @@ $(function() {
 
     addMessage: function(data) {
       if (!data.roomname)
-        data.roomname = 'lobby';
+        data.roomname = 'Lobby';
 
       // only add messages that are in current room
       if (data.roomname === app.roomname) {
@@ -221,7 +222,7 @@ $(function() {
       var message = {
         username: app.username,
         text: app.$message.val(),
-        roomname: app.roomname || 'lobby'
+        roomname: app.roomname || 'Lobby'
       };
 
       app.send(message);

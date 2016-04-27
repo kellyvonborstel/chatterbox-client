@@ -1,29 +1,31 @@
 body {
-  background: #eee;
-  text-align: center;
   padding: 0 25px;
+  margin: 0;
+  background: #4986cb;
   font-family: arial, sans-serif;
+  text-align: center;
 }
 
 #main {
-  width: 500px;
-  margin: auto;
-  text-align: left;
-  background: white;
+  width: 700px;
   padding: 50px 60px;
+  margin: auto;
   border: solid #ddd;
   border-width: 0 1px 1px 1px;
+  background: #fff;
+  text-align: left;
 }
 
 #main h1 {
+  padding: 0;
   margin-top: 0;
-  font-size: 35px;
-  margin-bottom: 5px;
-  padding: 5px;
+  margin-bottom: 30px;
+  color: #4986cb;
+  font-size: 3em;
 }
 
 #main h1 span {
-  font-style:italic;
+  font-style: italic;
 }
 
 #main ul {
@@ -31,9 +33,9 @@ body {
 }
 
 #main .error {
-  border: 1px solid red;
-  background: #FDEFF0;
   padding: 20px;
+  border: 1px solid #ff0000;
+  background: #fdeff0;
 }
 
 #main .success {
@@ -41,8 +43,8 @@ body {
 }
 
 #main .success code {
+  color: #00ff00;
   font-size: 12px;
-  color: green;
   line-height: 13px;
 }
 
@@ -60,8 +62,8 @@ form input[type=text] {
 }
 
 .chat {
-  padding: 5px;
-  margin-bottom: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
   background-color: #eee;
 }
 
