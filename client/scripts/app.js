@@ -98,6 +98,30 @@ $(function() {
       });
     },
 
+    clearMessages: function() {
+      app.$chats.empty();
+    },
+
+    populateMessages: function(results) {
+      app.clearMessages();
+      app.stopSpinner();
+
+      if (Array.isArray(results)) {
+        // add all fetched messages
+        results.forEach(app.addMessage);
+      }
+
+      // make it scroll to bottom
+      var scrollTop = app.$chats.prop('scrollHeight');
+      if (animate) {
+        app.$chats.animate({
+          scrollTop: scrollTop
+        });
+      } else {
+        app.$chats.scrollTop(scrollTop);
+      }
+    },
+
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
 
@@ -142,18 +166,6 @@ $(function() {
       }
 
       app.$roomSelect.val(app.room);
-    },
-
-    populateMessages: function(results) {
-      app.clearMessages();
-
-      if (Array.isArray(results)) {
-        results.forEach(app.addMessage);
-      }
-    },
-
-    clearMessages: function() {
-      app.$chats.empty();
     },
 
     addMessage: function(data) {
