@@ -181,6 +181,23 @@ $(function() {
       }
     },
 
+    addFriend: function(event) {
+      var username = $(event.currentTarget).attr('data-username');
+
+      if (username !== undefined) {
+        console.log('chatbox: adding %s as a friend', username);
+
+        // store as a friend
+        app.friends[username] = true;
+
+        // escape username in case it contains a quote
+        var selector = '[data-username="' + username.replace(/"/g, '\\\"') + '"]';
+
+        // bold all previous messages
+        $(selector).addClass('friend');
+      }
+    },
+
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
 
@@ -204,18 +221,6 @@ $(function() {
 
     stopSpinner: function() {
       $('.spinner img').hide();
-    },
-
-    addFriend: function(event) {
-      var username = $(event.currentTarget).attr('data-username');
-
-      if (username !== undefined) {
-        console.log('chatbox: adding %s as a friend', username);
-        app.friends[username] = true;
-
-        var selector = '[data-username="' + username.replace(/"/g, '\\\"') + '"]';
-        $(selector).addClass('friend');
-      }
     },
 
     handleSubmit: function(event) {
