@@ -122,6 +122,27 @@ $(function() {
       }
     },
 
+    populateRooms: function(results) {
+      app.$roomSelect.html('<option value="__newRoom">New Room...</option><option value="lobby" selected>Lobby</option>');
+
+      if (results) {
+        var rooms = {};
+        results.forEach(function(data) {
+          var roomname = data.roomname;
+          if (roomname && !rooms[roomname]) {
+            // add the room to select menu
+            app.addRoom(roomname);
+
+            // store that we already add this room
+            rooms[roomname] = true;
+          }
+        });
+      }
+
+      // select the menu option
+      app.$roomSelect.val(app.room);
+    },
+
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
 
@@ -145,27 +166,6 @@ $(function() {
 
     stopSpinner: function() {
       $('.spinner img').hide();
-    },
-
-    populateRooms: function(results) {
-      app.$roomSelect.html('<option value="__newRoom">New Room...</option><option value="lobby" selected>Lobby</option>');
-
-      if (results) {
-        var processsedRooms = {};
-        if (app.room !== 'lobby') {
-          app.addRoom(app.room);
-          processedRooms[app.room] = true;
-        }
-        results.forEach(function(data) {
-          var roomname = data.roomname;
-          if (roomname && !processedRooms[roomname]) {
-            app.addRoom(roomname);
-            processedRooms[roomname] = true;
-          }
-        });
-      }
-
-      app.$roomSelect.val(app.room);
     },
 
     addMessage: function(data) {
