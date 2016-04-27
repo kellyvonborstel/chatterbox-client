@@ -201,29 +201,35 @@ $(function() {
     saveRoom: function(event) {
       var selectedIndex = app.$roomSelect.prop('selectedIndex');
 
+      // new room is always the first option
       if (selectedIndex === 0) {
         var roomname = prompt('Enter a room name');
         if (roomname) {
+          // set the current room
           app.room = roomname;
+
+          // add room to menu
           app.addRoom(roomname);
+
+          // select the menu option
           app.$roomSelect.val(roomname);
+
+          // fetch messages again
           app.fetch();
         }
       } else {
+        app.startSpinner();
+
+        // store as undefined for empty names
         app.room = app.$roomSelect.val();
+
+        // fetch messages again
         app.fetch();
       }
     },
 
-    startSpinner: function() {
-      $('.spinner img').show();
-    },
-
-    stopSpinner: function() {
-      $('.spinner img').hide();
-    },
-
     handleSubmit: function(event) {
+      // stop form from submitting
       event.preventDefault();
 
       var message = {
@@ -231,7 +237,18 @@ $(function() {
         roomname: app.room || 'lobby',
         text: app.$message.val()
       };
+
       app.send(message);
+    },
+
+    startSpinner: function() {
+      $('.spinner img').show();
+      $('form input[type=submit]').attr('disabled', "true");
+    },
+
+    stopSpinner: function() {
+      $('.spinner img').fadeOut('fast');
+      $('form input[type=submit]').attr('disabled', null);
     }
   };
 });
