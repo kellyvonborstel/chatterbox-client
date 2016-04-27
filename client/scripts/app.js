@@ -7,6 +7,7 @@ $(function() {
     server: 'https//api.parse.com/1/classes/chatterbox/',
     username: 'anonymous',
     room: 'lobby',
+    lastMessageId: 0,
     friends: {},
 
     init: function() {
@@ -23,9 +24,27 @@ $(function() {
       app.$main.on('click', '.username', app.addFriend);
 
       app.stopSpinner();
-      app.fetch();
+      app.fetch(false);
 
       setInterval(app.fetch, 3000);
+    },
+
+    send: function(data) {
+      app.startSpinner();
+
+      $.ajax({
+        url: app.server,
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application.json',
+        success: function(data) {
+          console.log('chatterbox: message sent');
+          app.fetch();
+        },
+        error: function(data) {
+          console.error('chatterbox: failed to send message');
+        }
+      });
     },
 
     saveRoom: function(event) {
@@ -43,26 +62,6 @@ $(function() {
         app.room = app.$roomSelect.val();
         app.fetch();
       }
-    },
-
-    send: function(data) {
-      app.startSpinner();
-
-      $.ajax({
-        url: app.server,
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: 'application.json',
-        success: function(result) {
-          app.fetch();
-        },
-        error: function(reason) {
-          console.error('Failed to send data: ', reason);
-        },
-        complete: function() {
-          app.stopSpinner();
-        }
-      });
     },
 
     fetch: function() {
