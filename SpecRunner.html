@@ -25,22 +25,23 @@
 <body>
 <div id="mocha"></div>
 <div id="testarea" style="display: none;">
-
   <div id="main">
-    <h1>chatterbox</h1>
-    <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
+    <h1>Chatterbox</h1>
+    <div class="spinner">
+      <img src="client/images/spiffygif_46x46.gif">
+    </div>
     <div id="rooms">
-      Room:
+      <label>Room: </label>
       <select id="roomSelect">
       </select>
     </div>
     <form action="#" id="send" method="post">
+      <label>Message: </label>
       <input type="text" name="message" id="message"/>
       <input type="submit" name="submit" class="submit"/>
     </form>
     <div id="chats"></div>
   </div>
-
 </div>
 </body>
 </html>

@@ -184,7 +184,7 @@ $(function() {
         app.friends[username] = true;
 
         // escape the username in case it contains a quote
-        var selector = '[data-username="'+username.replace(/"/g, '\\\"')+'"]';
+        var selector = '[data-username="' + username.replace(/"/g, '\\\"') + '"]';
         // bold all previous messages
         var $usernames = $(selector).addClass('friend');
       }
