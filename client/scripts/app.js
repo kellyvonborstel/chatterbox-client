@@ -61,6 +61,7 @@ $(function() {
         contentType: 'application/json',
         data: { order: '-createdAt'},
         success: function(data) {
+          console.log(data);
           console.log('chatterbox: Messages fetched');
 
           // return if no results
@@ -118,7 +119,7 @@ $(function() {
     },
 
     populateRooms: function(results) {
-      app.$roomSelect.html('<option value="__newRoom">New room...</option><option value="" selected>lobby</option>');
+      app.$roomSelect.html('<option value="__newRoom">New room...</option>');
 
       if (results) {
         var rooms = {};

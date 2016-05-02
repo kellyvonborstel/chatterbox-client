@@ -61,6 +61,36 @@ form input[type=text] {
   padding: 5px;
 }
 
+label {
+  margin-right: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#roomSelect {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 30px;
+  padding: 5px 7px;
+  border: solid 1px #ccc;
+  font-size: 1em;
+}
+
+#message {
+  -webkit-appearance: none;
+  width: 500px;
+  height: 30px;
+  padding: 0;
+  padding-left: 7px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.submit {
+  display: none;
+}
+
 .chat {
   padding: 10px;
   margin-bottom: 10px;
@@ -83,6 +113,7 @@ form input[type=text] {
 
 .spinner img {
   padding: 10px;
+  margin-top: 30px;
 }
 
 .friend {
