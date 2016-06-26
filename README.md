@@ -1,7 +1,7 @@
 Chatterbox
 ==============
 
-A chat client that gets and sends messages using the Parse API.
+Chat client that gets and sends messages using the Parse API
 
 ### Testing
 
